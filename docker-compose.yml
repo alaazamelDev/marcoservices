@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  marco_customer_postgres:
+    container_name: marco_customer_db
+    image: postgres:15.1-alpine
+    volumes:
+      - marco_customer_pg_data:/data/postgres
+    environment:
+      POSTGRES_USER: alaa
+      POSTGRES_PASSWORD: alaa1234
+      POSTGRES_DB: marco_customers
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - marco_customer_network
+    restart: unless-stopped
+
+#  marco_customer_pgadmin:
+#    container_name: marco_customer_pgadmin
+#    image: dpage/pgadmin4:8.4
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+#      PGADMIN_CONFIG_SERVER_MODE: 'False'
+#    networks:
+#      - marco_customer_network
+#    volumes:
+#      - marco_customer_pg_admin_data:/usr/lib/pgadmin
+
+networks:
+  marco_customer_network:
+    driver: bridge
+
+volumes:
+  marco_customer_pg_data:
+  marco_customer_pg_admin_data:
