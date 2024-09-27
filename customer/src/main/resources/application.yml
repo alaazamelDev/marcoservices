@@ -4,3 +4,16 @@ server:
 spring:
   application:
     name: customer
+  datasource:
+    username: alaa
+    password: alaa1234
+    url: jdbc:postgresql://localhost:5432/marco_customers
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
