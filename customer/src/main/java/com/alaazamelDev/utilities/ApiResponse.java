@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.HashMap;
+
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse {
@@ -12,12 +14,19 @@ public class ApiResponse {
     private Integer statusCode;
     private Object data;
 
-    public static ApiResponse errorResponse(String message, Integer statusCode) {
-        return new ApiResponse(message, statusCode, null);
+    public static HashMap<String, Object> errorResponse(String message, Integer statusCode) {
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("message", message);
+        responseMap.put("statusCode", statusCode == null ? 400 : statusCode);
+        return responseMap;
     }
 
-    public static ApiResponse success(String message, Object data) {
-        return new ApiResponse(message, 200, data);
+    public static HashMap<String, Object> success(String message, Object data) {
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("message", message);
+        responseMap.put("statusCode", 200);
+        responseMap.put("data", data);
+        return responseMap;
     }
 
 }

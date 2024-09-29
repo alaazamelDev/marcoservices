@@ -4,15 +4,19 @@ import com.alaazamelDev.customer.models.Customer;
 import com.alaazamelDev.customer.requests.RegisterCustomerRequest;
 import com.alaazamelDev.customer.responses.CustomerResponse;
 import com.alaazamelDev.customer.services.CustomerService;
+import com.alaazamelDev.exceptions.EmailAlreadyExistsException;
 import com.alaazamelDev.utilities.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
 
 @Slf4j
 @RestController
@@ -20,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public record CustomerController(CustomerService customerService) {
 
     @PostMapping
-    public ResponseEntity<ApiResponse> registerCustomer(
+    public ResponseEntity<HashMap<String, Object>> registerCustomer(
             @Valid @RequestBody RegisterCustomerRequest request
     ) {
 
@@ -39,10 +43,21 @@ public record CustomerController(CustomerService customerService) {
                     response
             ));
 
-        } catch (Exception e) {
+        } catch (EmailAlreadyExistsException e) {
             return ResponseEntity
                     .badRequest()
-                    .body(ApiResponse.errorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(ApiResponse.errorResponse(
+                            e.getMessage(),
+                            HttpStatus.BAD_REQUEST.value()
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body(ApiResponse.errorResponse(
+                            e.getMessage(),
+                            HttpStatus.INTERNAL_SERVER_ERROR.value()
+                    ));
         }
     }
 }
