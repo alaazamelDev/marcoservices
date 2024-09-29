@@ -1,4 +1,4 @@
-package com.alaazamelDev.customer;
+package com.alaazamelDev;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
