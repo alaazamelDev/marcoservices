@@ -1,4 +1,4 @@
-package com.alaazamelDev.exceptions;
+package com.marcoservices.exceptions;
 
 public class EmailAlreadyExistsException extends RuntimeException {
     @Override

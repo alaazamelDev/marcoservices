@@ -1,4 +1,4 @@
-package com.alaazamelDev.customer.requests;
+package com.marcoservices.customer.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

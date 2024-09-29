@@ -1,11 +1,11 @@
-package com.alaazamelDev.customer.controllers;
+package com.marcoservices.customer.controllers;
 
-import com.alaazamelDev.customer.models.Customer;
-import com.alaazamelDev.customer.requests.RegisterCustomerRequest;
-import com.alaazamelDev.customer.responses.CustomerResponse;
-import com.alaazamelDev.customer.services.CustomerService;
-import com.alaazamelDev.exceptions.EmailAlreadyExistsException;
-import com.alaazamelDev.utilities.ApiResponse;
+import com.marcoservices.customer.models.Customer;
+import com.marcoservices.customer.requests.RegisterCustomerRequest;
+import com.marcoservices.customer.responses.CustomerResponse;
+import com.marcoservices.customer.services.CustomerService;
+import com.marcoservices.exceptions.EmailAlreadyExistsException;
+import com.marcoservices.utilities.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

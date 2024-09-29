@@ -1,9 +1,9 @@
-package com.alaazamelDev.customer.services;
+package com.marcoservices.customer.services;
 
-import com.alaazamelDev.customer.models.Customer;
-import com.alaazamelDev.customer.repositories.CustomerRepository;
-import com.alaazamelDev.customer.requests.RegisterCustomerRequest;
-import com.alaazamelDev.exceptions.EmailAlreadyExistsException;
+import com.marcoservices.customer.models.Customer;
+import com.marcoservices.customer.repositories.CustomerRepository;
+import com.marcoservices.customer.requests.RegisterCustomerRequest;
+import com.marcoservices.exceptions.EmailAlreadyExistsException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

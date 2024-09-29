@@ -1,4 +1,4 @@
-package com.alaazamelDev.utilities;
+package com.marcoservices.utilities;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
