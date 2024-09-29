@@ -1,4 +1,4 @@
-package com.alaazamelDev.customer.models;
+package com.marcoservices.customer.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
