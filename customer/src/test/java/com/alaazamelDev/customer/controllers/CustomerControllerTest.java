@@ -3,8 +3,10 @@ package com.alaazamelDev.customer.controllers;
 import com.alaazamelDev.customer.models.Customer;
 import com.alaazamelDev.customer.requests.RegisterCustomerRequest;
 import com.alaazamelDev.customer.services.CustomerService;
+import com.alaazamelDev.exceptions.EmailAlreadyExistsException;
 import com.alaazamelDev.utilities.LocalDateFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,7 +36,11 @@ class CustomerControllerTest {
     @MockBean
     private CustomerService customerService;  // Mock the service layer
 
+    // constants
+    private static final String REGISTER_CUSTOMER_ENDPOINT = "/api/v1/customers";
+
     @Test
+    @DisplayName("RegisterCustomer_WithValidRequest_ReturnsSuccessResponse")
     void shouldReturnRegisteredCustomerSuccessResponseCodeWhenValidRequestPassed() throws Exception {
 
         // Arrange
@@ -60,15 +66,15 @@ class CustomerControllerTest {
         // Act & Assert
         mockMvc.perform(
                         // request details (acting)
-                        post("/api/v1/customers")
-                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                        post(REGISTER_CUSTOMER_ENDPOINT)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestBody)
                 )
 
                 // expectations from response (assertion)
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.message").value("customer created successfully"))
                 .andExpect(jsonPath("$.data.id").value(staticId.toString()))
@@ -76,6 +82,44 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.data.lastName").value("Zamel"))
                 .andExpect(jsonPath("$.data.email").value("alaa.zamel@gmail.com"))
                 .andExpect(jsonPath("$.data.createdAt").value(LocalDateFormatter.formatDateTime(now)));
+
+        verify(customerService, times(1))
+                .register(any(RegisterCustomerRequest.class)); /* verify that service method called once */
+    }
+
+    @Test
+    @DisplayName("RegisterCustomer_WithDuplicatedEmailRequest_ReturnsBadRequestResponse")
+    void shouldReturnBadRequestWhenRegisteringWithDuplicatedEmail() throws Exception {
+
+        // Arrange
+        RegisterCustomerRequest request = RegisterCustomerRequest.builder()
+                .firstName("Alaa")
+                .lastName("Zamel")
+                .email("alaa.zamel@gmail.com")
+                .build();
+        String parsedRequest = objectMapper.writeValueAsString(request);
+
+        when(customerService.register(any(RegisterCustomerRequest.class)))
+                .thenThrow(EmailAlreadyExistsException.class);
+
+
+        // Act
+        mockMvc.perform(
+                        // prepare request details
+                        post(REGISTER_CUSTOMER_ENDPOINT)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(parsedRequest)
+                )
+
+                // Assert
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.message").value("Email already exists"))
+                .andExpect(jsonPath("$.statusCode").value(400));
+
+        verify(customerService, times(1))
+                .register(any(RegisterCustomerRequest.class)); /* verify that service method called once */
 
     }
 }
