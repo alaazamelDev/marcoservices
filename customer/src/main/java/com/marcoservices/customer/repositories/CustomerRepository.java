@@ -1,6 +1,6 @@
-package com.alaazamelDev.customer.repositories;
+package com.marcoservices.customer.repositories;
 
-import com.alaazamelDev.customer.models.Customer;
+import com.marcoservices.customer.models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,7 +1,7 @@
-package com.alaazamelDev.customer.responses;
+package com.marcoservices.customer.responses;
 
-import com.alaazamelDev.customer.models.Customer;
-import com.alaazamelDev.utilities.AbstractResponse;
+import com.marcoservices.customer.models.Customer;
+import com.marcoservices.utilities.AbstractResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

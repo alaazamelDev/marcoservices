@@ -1,10 +1,10 @@
-package com.alaazamelDev.customer.controllers;
+package com.marcoservices.customer.controllers;
 
-import com.alaazamelDev.customer.models.Customer;
-import com.alaazamelDev.customer.requests.RegisterCustomerRequest;
-import com.alaazamelDev.customer.services.CustomerService;
-import com.alaazamelDev.exceptions.EmailAlreadyExistsException;
-import com.alaazamelDev.utilities.LocalDateFormatter;
+import com.marcoservices.customer.models.Customer;
+import com.marcoservices.customer.requests.RegisterCustomerRequest;
+import com.marcoservices.customer.services.CustomerService;
+import com.marcoservices.exceptions.EmailAlreadyExistsException;
+import com.marcoservices.utilities.LocalDateFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
