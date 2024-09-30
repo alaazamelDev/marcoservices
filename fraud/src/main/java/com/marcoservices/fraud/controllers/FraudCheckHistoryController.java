@@ -19,11 +19,14 @@ public record FraudCheckHistoryController(FraudCheckHistoryService service) {
 
 
     @GetMapping(path = "{customerId}")
-    public ResponseEntity<HashMap<String, Object>> isFraudster(@PathVariable UUID customerId) {
+    public ResponseEntity<HashMap<String, Object>> isFraudster(
+            @PathVariable("customerId") String customerId
+    ) {
 
         // call the action
-        Boolean isFraudster = service.isFraudulentCustomer(customerId);
-        HashMap<String, Object> response = ApiResponse.success("checked successfully!", isFraudster);
+        UUID customerUUID = UUID.fromString(customerId);
+        Boolean isFraudster = service.isFraudulentCustomer(customerUUID);
+        HashMap<String, Object> response = ApiResponse.success("checked successfully", isFraudster);
         return ResponseEntity.ok(response);
     }
 
