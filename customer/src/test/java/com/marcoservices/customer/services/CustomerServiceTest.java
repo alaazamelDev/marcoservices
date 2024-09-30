@@ -1,8 +1,10 @@
 package com.marcoservices.customer.services;
 
+import com.marcoservices.customer.clients.FraudClient;
 import com.marcoservices.customer.models.Customer;
 import com.marcoservices.customer.repositories.CustomerRepository;
 import com.marcoservices.customer.requests.RegisterCustomerRequest;
+import com.marcoservices.exceptions.CustomerIsFraudsterException;
 import com.marcoservices.exceptions.EmailAlreadyExistsException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Tag("services")
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +28,9 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private FraudClient fraudClient;
 
     @InjectMocks
     private CustomerService customerService;
@@ -54,14 +58,17 @@ class CustomerServiceTest {
                 .email("alaa.zamel80@gmail.com")
                 .createdAt(creationTime)
                 .build();
-        when(customerRepository.save(any(Customer.class)))
+        when(customerRepository.saveAndFlush(any(Customer.class)))
                 .thenReturn(customerWithId); /* using argument matchers */
+        when(fraudClient.checkIsFraudster(any(UUID.class)))
+                .thenReturn(false);
 
         // Act
         Customer savedCustomer = customerService.register(request);
 
         // Assert
-        verify(customerRepository).save(newCustomer);
+        verify(customerRepository).saveAndFlush(newCustomer);
+        verify(fraudClient).checkIsFraudster(customerWithId.getId());
         assertThat(savedCustomer)
                 .as("Check that the returned entity is not null")
                 .isNotNull();
@@ -93,7 +100,7 @@ class CustomerServiceTest {
         RegisterCustomerRequest request = RegisterCustomerRequest.builder()
                 .email("alaa.zamel80@gmail.com")
                 .build();
-        when(customerRepository.save(customer))
+        when(customerRepository.saveAndFlush(customer))
                 .thenThrow(DataIntegrityViolationException.class);
 
         // Act & Assert
@@ -102,5 +109,33 @@ class CustomerServiceTest {
                 .isInstanceOf(EmailAlreadyExistsException.class)
                 .hasMessageContaining("Email already exists");
 
+    }
+
+    @Test
+    void showThrowCustomerIsFraudsterWhenRegisteringFraudsterCustomer() {
+
+        // Arrange
+        UUID uuid = UUID.randomUUID();
+        RegisterCustomerRequest request = RegisterCustomerRequest.builder()
+                .email("alaa.zamel80@gmail.com")
+                .build();
+        Customer customer = Customer.builder()
+                .id(uuid)
+                .email("alaa.zamel80@gmail.com")
+                .build();
+        when(customerRepository.saveAndFlush(any(Customer.class)))
+                .thenReturn(customer);
+        when(fraudClient.checkIsFraudster(any(UUID.class)))
+                .thenThrow(CustomerIsFraudsterException.class);
+
+        // Act & Assert
+        assertThatThrownBy(() -> customerService.register(request))
+                .as("Check if it handles fraudster customer registration")
+                .isInstanceOf(CustomerIsFraudsterException.class)
+                .hasMessageContaining("the customer is a fraudster");
+        verify(customerRepository, times(1))
+                .saveAndFlush(Customer.builder().email(customer.getEmail()).build());
+        verify(fraudClient, times(1))
+                .checkIsFraudster(uuid);
     }
 }
