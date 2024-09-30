@@ -1,0 +1,18 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: fraud
+  datasource:
+    url: jdbc:postgresql://localhost:5433/marco_frauds
+    username: alaa
+    password: alaa1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
