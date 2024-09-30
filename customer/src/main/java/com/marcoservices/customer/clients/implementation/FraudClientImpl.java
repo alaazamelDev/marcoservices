@@ -4,10 +4,12 @@ import com.marcoservices.customer.clients.FraudClient;
 import com.marcoservices.customer.clients.responses.FraudCheckResponse;
 import com.marcoservices.exceptions.CustomerIsFraudsterException;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
+@Service
 @AllArgsConstructor
 public class FraudClientImpl implements FraudClient {
 
@@ -41,3 +43,4 @@ public class FraudClientImpl implements FraudClient {
         return false;
     }
 }
+
