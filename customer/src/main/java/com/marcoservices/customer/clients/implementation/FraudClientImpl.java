@@ -14,7 +14,7 @@ import java.util.UUID;
 public class FraudClientImpl implements FraudClient {
 
     // constants
-    private final static String IS_FRAUDSTER_ENDPOINT = "http://localhost:8081/api/v1/feaud-check";
+    private final static String IS_FRAUDSTER_ENDPOINT = "http://localhost:8081/api/v1/fraud-check";
 
     // dependencies
     private final RestTemplate restTemplate;

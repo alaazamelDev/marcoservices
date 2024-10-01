@@ -1,13 +1,7 @@
 package com.marcoservices.customer.clients.responses;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@AllArgsConstructor
-public class FraudCheckResponse {
+public record FraudCheckResponse(@JsonProperty("data") Boolean isFraudster) {
 
-    private Boolean data;
-
-    public Boolean isFraudster() {
-        return data;
-    }
 }

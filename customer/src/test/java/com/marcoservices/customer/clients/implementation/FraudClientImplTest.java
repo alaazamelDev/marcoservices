@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class FraudClientImplTest {
 
     // constants
-    private final static String IS_FRAUDSTER_ENDPOINT = "http://localhost:8081/api/v1/feaud-check";
+    private final static String IS_FRAUDSTER_ENDPOINT = "http://localhost:8081/api/v1/fraud-check";
 
     @Mock
     private RestTemplate restTemplate;
